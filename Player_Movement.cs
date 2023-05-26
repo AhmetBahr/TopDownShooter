@@ -25,6 +25,7 @@ public class Player_Movement : MonoBehaviour
         playerMovement();
         MousePosition();
         fireFunk();
+
     }
     private void playerMovement()
     {
@@ -61,5 +62,22 @@ public class Player_Movement : MonoBehaviour
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Fire")
+        {
+            Debug.Log("Girdi");
+
+        }
+       
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.tag == "Fire")
+        {
+            Debug.Log("Çýktý");
+
+        }
+    }
 
 }

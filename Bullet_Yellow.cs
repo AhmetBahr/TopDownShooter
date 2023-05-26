@@ -9,6 +9,8 @@ public class Bullet_Yellow : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
 
 
+
+
     private void Update()
     {
         bulletMove();
@@ -20,10 +22,12 @@ public class Bullet_Yellow : MonoBehaviour
     {
         if (collision.tag == "Enemy")
         {
-            Destroy(collision.gameObject);
+            //  Destroy(collision.gameObject);
+          //  Be.TakeDamage(10);
+            Destroy(gameObject);
 
         }
-        Destroy(gameObject);
+        //
     }
 
     private void bulletMove()
