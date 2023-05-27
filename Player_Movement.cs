@@ -5,15 +5,22 @@ using UnityEngine;
 public class Player_Movement : MonoBehaviour
 {
 
+    [Header("Speed")]
+    [SerializeField] private float moveSpeed;
 
-    private Camera theCam;
+    [Header("Camera")]
+    [SerializeField] private Camera theCam;
 
+    [Header("Position")]
     [SerializeField] private Transform firePoint;
+
+    [Header("Prefs")]
     [SerializeField] private GameObject bulletToFire;
 
+    [Header("Rb")]
     [SerializeField] private Rigidbody2D rb2D;
-    [SerializeField] private float moveSpeed;
-  
+
+
 
     private void Start()
     {

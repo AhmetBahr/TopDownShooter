@@ -4,17 +4,26 @@ using UnityEngine;
 
 public class Playe_MeleeAttack : MonoBehaviour
 {
-
+    [Header("Time")]
     private float timeBtwAttack;
-    public float statTimeBtwAttack;
+    [SerializeField] private float statTimeBtwAttack;
 
-    public Transform attackPos;
-    public LayerMask whatisEnemies;
-   // public Animator camAnim;
-    public Animator playerAnim;
-    public float attackRangeX;
-    public float attackRangeY;
-    public float damage;
+    [Header("Damage")]
+    [SerializeField] private float damage;
+
+
+    [Header("Animator")]
+    [SerializeField] private Animator playerAnim;
+
+    [Header("Attack")]
+    [SerializeField] private float attackRangeX;
+    [SerializeField] private float attackRangeY;
+
+    [Header("Position")]
+    [SerializeField] private Transform attackPos;
+
+    [Header("LayerMask")]
+    [SerializeField] private LayerMask whatisEnemies;
 
     private void Update()
     {
@@ -22,7 +31,7 @@ public class Playe_MeleeAttack : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(1))
             {
-              //  camAnim.SetTrigger("shake");
+              //  camAnim.SetTrigger("shake");  Sallama güzel olabilir
                 playerAnim.SetTrigger("attack");
                 Collider2D[] enemiesToDamage = Physics2D.OverlapBoxAll(attackPos.position, new Vector2(attackRangeX, attackRangeY), 0, whatisEnemies);
 

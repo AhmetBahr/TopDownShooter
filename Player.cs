@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-
+    [Header("Health")]
     [SerializeField] private float maxHealth = 300;
     [SerializeField] private float currentHealth;
-
-
+ 
+    
+    [Header("Scripts")]
     [SerializeField] private Healty hl;
 
     private void Start()
