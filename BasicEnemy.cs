@@ -54,7 +54,6 @@ public class BasicEnemyShoter : MonoBehaviour
         //hurt sound
         //blood effect
         health -= damage;
-      //  Debug.Log("Damage Taken!");
     }
 
 
@@ -62,7 +61,6 @@ public class BasicEnemyShoter : MonoBehaviour
     {
         if (collision.tag == "YellowBullet")
         {
-            //  Destroy(collision.gameObject);
             TakeDamage(20);
     
         }
