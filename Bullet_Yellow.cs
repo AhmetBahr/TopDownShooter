@@ -22,12 +22,18 @@ public class Bullet_Yellow : MonoBehaviour
     {
         if (collision.tag == "Enemy")
         {
-            //  Destroy(collision.gameObject);
-          //  Be.TakeDamage(10);
+
             Destroy(gameObject);
 
         }
-        //
+        if (collision.tag == "Coli")
+        {
+
+            Destroy(gameObject);
+
+        }
+
+
     }
 
     private void bulletMove()

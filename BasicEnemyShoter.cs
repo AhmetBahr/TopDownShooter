@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BasicEnemyShoter : MonoBehaviour
+public class BasicEnemy : MonoBehaviour
 {
 
     [Header("Main Data")]

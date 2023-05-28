@@ -37,9 +37,12 @@ public class Playe_MeleeAttack : MonoBehaviour
 
                 for(int i=0;i< enemiesToDamage.Length;i++)
                 {
+
                     enemiesToDamage[i].GetComponent<BasicEnemy>().TakeDamage(damage);
 
+
                 }
+
                 timeBtwAttack = statTimeBtwAttack;
 
             }

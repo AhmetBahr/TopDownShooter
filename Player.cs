@@ -20,16 +20,26 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.H))
-            TakeDamage(20);
+        control();
     }
 
 
-    private void TakeDamage(float damage)
+    public void TakeDamage(float damage)
     {
         currentHealth -= damage;
         hl.setHealth(currentHealth);
     }
 
+
+    private void control()
+    {
+        if( currentHealth < 0)
+        {
+            //anim 
+            DestroyObject(gameObject);
+        }
+
+
+    }
 
 }

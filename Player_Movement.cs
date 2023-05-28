@@ -8,23 +8,23 @@ public class Player_Movement : MonoBehaviour
     [Header("Speed")]
     [SerializeField] private float moveSpeed;
 
-    [Header("Camera")]
-    [SerializeField] private Camera theCam;
 
     [Header("Position")]
     [SerializeField] private Transform firePoint;
 
     [Header("Prefs")]
     [SerializeField] private GameObject bulletToFire;
+    [SerializeField] private GameObject FirePoint;
 
     [Header("Rb")]
     [SerializeField] private Rigidbody2D rb2D;
 
 
+    public CampFire fr;
 
     private void Start()
     {
-        theCam = Camera.main;
+        fr = GameObject.Find("Fire").GetComponent<CampFire>();
     }
 
     private void Update()
@@ -75,6 +75,8 @@ public class Player_Movement : MonoBehaviour
         {
             Debug.Log("Girdi");
 
+            fr.On();
+
         }
        
     }
@@ -83,6 +85,9 @@ public class Player_Movement : MonoBehaviour
         if (collision.tag == "Fire")
         {
             Debug.Log("Çýktý");
+
+            fr.Off();
+
 
         }
     }
