@@ -24,7 +24,7 @@ public class Player : MonoBehaviour
     }
 
 
-    public void TakeDamage(float damage)
+    public void PlayerTakeDamage(float damage)
     {
         currentHealth -= damage;
         hl.setHealth(currentHealth);

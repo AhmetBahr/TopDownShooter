@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy_Bullet : MonoBehaviour
+public class Enemy_Follow_Bullet : MonoBehaviour
 {
     [SerializeField] private float speed;
     [SerializeField] private float damage = 50;
@@ -38,7 +38,7 @@ public class Enemy_Bullet : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             DestroyerProjectiles();
-            plr.TakeDamage(damage);
+            plr.PlayerTakeDamage(damage);
             Debug.Log("Oyuncu hasar aldý");
         }
 
