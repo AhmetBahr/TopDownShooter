@@ -11,11 +11,11 @@ public class Enemy_Bullet : MonoBehaviour
 
     [SerializeField] private Rigidbody2D rb;
 
-    Player ply;
+    Player_Main ply;
 
     private void Start()
     {
-        ply = GameObject.FindWithTag("Player").GetComponent<Player>();
+       ply = GameObject.FindWithTag("Player").GetComponent<Player_Main>();
     }
 
 
@@ -44,7 +44,7 @@ public class Enemy_Bullet : MonoBehaviour
 
     private void bulletDestroyer()
     {
-        Destroy(gameObject, 6);
+        Destroy(gameObject, 3);
     }
 
 }

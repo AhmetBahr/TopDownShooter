@@ -25,7 +25,19 @@ public class Bullet_Red : MonoBehaviour
 
         float rot = Mathf.Atan2(rotation.y, rotation.x)*Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0,0,rot);
+
+        destroyerObject();
     }
 
+
+    private void Update()
+    {
+        
+    }
+
+    private void destroyerObject()
+    {
+        Destroy(gameObject, 5);
+    }
 
 }

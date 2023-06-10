@@ -100,7 +100,7 @@ public class Player_Main : MonoBehaviour
         foreach(Collider2D enemyGameobject in enemy)
         {
             //  Debug.Log("Hit enemy");
-            enemyGameobject.GetComponent<BasicEnemy>().health -= MeleeDamage;
+            enemyGameobject.GetComponent<Enemy_Health>().health -= MeleeDamage;
         }
     }
 
