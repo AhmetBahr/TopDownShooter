@@ -1,18 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Bullet_Red : MonoBehaviour
 {
 
     [SerializeField] float force;
+    [SerializeField] float bulletDamage;
+
+    [SerializeField] private GameObject attackPoint;
+    [SerializeField] private float radius;
+    [SerializeField] private LayerMask layers;
 
     private Vector3 mousePos;
     private Camera mainCam;
     private Rigidbody2D rb;
 
+    Enemy_Health enmy;
+
     private void Start()
     {
+
+
         mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         rb = GetComponent<Rigidbody2D>();
 
@@ -35,9 +45,31 @@ public class Bullet_Red : MonoBehaviour
         
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Enemy")
+        {
+            Collider2D[] enemy = Physics2D.OverlapCircleAll(attackPoint.transform.position, radius, layers);
+
+            foreach (Collider2D enemyGameobject in enemy)
+            {
+                enemyGameobject.GetComponent<Enemy_Health>().health -= bulletDamage;
+            }
+          //  Debug.Log("Damage enemy");
+            Destroy(gameObject);
+        }
+
+
+    }
+
+
+
     private void destroyerObject()
     {
         Destroy(gameObject, 5);
     }
-
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(attackPoint.transform.position, radius);
+    }
 }

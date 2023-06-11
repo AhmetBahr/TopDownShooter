@@ -99,7 +99,6 @@ public class Player_Main : MonoBehaviour
 
         foreach(Collider2D enemyGameobject in enemy)
         {
-            //  Debug.Log("Hit enemy");
             enemyGameobject.GetComponent<Enemy_Health>().health -= MeleeDamage;
         }
     }
@@ -110,10 +109,7 @@ public class Player_Main : MonoBehaviour
     }
 
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(attackPoint.transform.position, radius);
-    }
+
 
     #endregion
 
@@ -122,7 +118,7 @@ public class Player_Main : MonoBehaviour
     {
         if (collision.tag == "Fire")
         {
-            Debug.Log("Girdi");
+        //    Debug.Log("Girdi");
 
             fr.On();
 
@@ -133,14 +129,17 @@ public class Player_Main : MonoBehaviour
     {
         if (collision.tag == "Fire")
         {
-            Debug.Log("Çýktý");
+          //  Debug.Log("Çýktý");
 
             fr.Off();
 
 
         }
     }
-
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(attackPoint.transform.position, radius);
+    }
     #endregion
 
 }

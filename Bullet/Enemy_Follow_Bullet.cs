@@ -44,7 +44,7 @@ public class Enemy_Follow_Bullet : MonoBehaviour
 
     void DestroyerProjectiles()
     {
-        Destroy(gameObject,3);
+        Destroy(gameObject,2);
     }
 
 }
