@@ -59,6 +59,17 @@ public class Bullet_Red : MonoBehaviour
             Destroy(gameObject);
         }
 
+        if (collision.tag == "Shield")
+        {
+            Collider2D[] enemy = Physics2D.OverlapCircleAll(attackPoint.transform.position, radius, layers);
+
+            foreach (Collider2D enemyGameobject in enemy)
+            {
+               Destroy(gameObject);
+                Debug.Log("Shield damage");
+            }
+  
+        }
 
     }
 

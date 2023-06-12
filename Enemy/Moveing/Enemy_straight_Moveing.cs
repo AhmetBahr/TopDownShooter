@@ -15,6 +15,7 @@ public class Enemy_straight_Moveing : MonoBehaviour
     [SerializeField] private float min_Y;
     [SerializeField] private float max_Y;
     [SerializeField] private GameObject Enemy;
+    [SerializeField] private GameObject Gun;
 
     [Header("Core")]
     [SerializeField] private float NewmoveTime;
@@ -78,10 +79,36 @@ public class Enemy_straight_Moveing : MonoBehaviour
     {
         moveSpot.position = new Vector2(Random.Range(min_X, max_X), Enemy.transform.position.y);
 
+        Gun.transform.localRotation = Quaternion.Euler(0, 0, 0);
+
+        if (moveSpot.position.x < Enemy.transform.position.x)
+        {
+            Gun.transform.localRotation = Quaternion.Euler(0, 0, 180);
+
+            transform.localScale = new Vector2(-1, 1);  
+        }
+        if (moveSpot.position.x > Enemy.transform.position.x)
+        {
+            transform.localScale = new Vector2(1, 1);
+        }
+
+
     }
     private void Moveing_Vectortal()
     {
         moveSpot.position = new Vector2(Enemy.transform.position.x, Random.Range(min_Y, max_Y));
+        
+        Gun.transform.localRotation = Quaternion.Euler(0, 0, -90);
+
+
+        if (moveSpot.position.y < Enemy.transform.position.y)
+        {
+            transform.localScale = new Vector2(1, 1);
+        }
+        if (moveSpot.position.y > Enemy.transform.position.y)
+        {
+            transform.localScale = new Vector2(1, -1    );
+        }
 
     }
 

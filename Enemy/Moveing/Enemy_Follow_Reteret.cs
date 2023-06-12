@@ -10,8 +10,10 @@ public class Enemy_Follow_Reteret : MonoBehaviour
     [SerializeField] private float retreatDistance;
 
 
+
     [Header("Object")]
     private Transform player;
+    private Transform coli;
 
 
     
@@ -19,6 +21,7 @@ public class Enemy_Follow_Reteret : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<Transform>();
+
 
     }
 
@@ -38,6 +41,9 @@ public class Enemy_Follow_Reteret : MonoBehaviour
         {
             transform.position = Vector2.MoveTowards(transform.position, player.position, - speed * Time.deltaTime);
         }
+
+
+
     }
 
 

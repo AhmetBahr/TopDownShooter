@@ -16,10 +16,6 @@ public class Shooting : MonoBehaviour
 
     private float timer;
 
-    [Header("Melee")]
-    [SerializeField] private float meleeRadius;
-    
-
     void Start()
     {
         mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
