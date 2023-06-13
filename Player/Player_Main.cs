@@ -7,14 +7,23 @@ public class Player_Main : MonoBehaviour
     [Header("Core")]
     [SerializeField] private float maxHealth = 300;
     [SerializeField] private float moveSpeed;
-    [SerializeField] private float MeleeDamage;
+    [SerializeField] private float runSpeed;
   
     private float currentHealth;
+    [SerializeField] private float moveHorizontal;
+    [SerializeField] private float moveVertical;
 
-    private float moveHori;
-    private float MoveVeck;
+    [Header("Dash")]
+    [SerializeField] private float dashingPower;
+    [SerializeField] private float dashingTime;
+    [SerializeField] private float dashingCooldown;
+    [SerializeField] private bool canDash;
+
+    private bool isdashing;
+     
 
     [Header("MeleeAttack")]
+    [SerializeField] private float MeleeDamage;
     [SerializeField] private GameObject attackPoint;
     [SerializeField] private float radius;
     [SerializeField] private LayerMask layers;
@@ -59,13 +68,61 @@ public class Player_Main : MonoBehaviour
     #region Movement
     private void playerMovement()
     {
-        moveHori = Input.GetAxisRaw("Horizontal");
-        MoveVeck = Input.GetAxisRaw("Vertical");
-        rb2D.velocity = new Vector2(moveHori, MoveVeck) * moveSpeed;
+        if (isdashing)
+            return;
+
+        moveHorizontal = Input.GetAxisRaw("Horizontal");
+        moveVertical = Input.GetAxisRaw("Vertical");
+
+
+        if (!Input.GetKey(KeyCode.LeftShift)) // Normal walk 
+        {
+            rb2D.velocity = new Vector2(moveHorizontal, moveVertical) * moveSpeed;
 
 
 
-        if (moveHori > .1f || moveHori < -.1f)
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift)) // For Run 
+        {
+            rb2D.velocity = new Vector2(moveHorizontal, moveVertical) * runSpeed;
+
+        }
+
+
+        if (moveHorizontal > -.1f)
+        {
+            transform.localRotation = Quaternion.Euler(0, 0, 0);
+
+        }
+        if (moveHorizontal < -.1f)
+        {
+            transform.localRotation = Quaternion.Euler(0, 180, 0);
+
+        }
+        if(moveVertical > -.1f)
+        {
+            //Animaton
+        }
+        if (moveVertical < -.1f)
+        {
+            //Animaton
+        }
+
+
+        if (Input.GetKey(KeyCode.E) && canDash && moveHorizontal != 0)  // Horizontal Dash
+        {
+            StartCoroutine(DashHorizontal());
+        }
+
+        if (Input.GetKey(KeyCode.E) && canDash && moveVertical != 0 ) // Vertical Dash
+        {   
+            StartCoroutine(DashVertical());
+        }
+
+
+
+        if (moveHorizontal > .1f || moveHorizontal < -.1f)
         {
             anim.SetBool("Walk-Hori", true);
         }
@@ -82,6 +139,28 @@ public class Player_Main : MonoBehaviour
 
     }
 
+    private IEnumerator DashHorizontal()
+    {
+        canDash = false;
+        isdashing = true;
+        rb2D.velocity = new Vector2(transform.localScale.x * -dashingPower, 0f);
+
+        yield return new WaitForSeconds(dashingTime);
+        isdashing = false;
+        yield return new WaitForSeconds(dashingCooldown);
+        canDash = true;
+    }
+    private IEnumerator DashVertical()
+    {
+        canDash = false;
+        isdashing = true;
+        rb2D.velocity = new Vector2(0f, transform.localScale.y * dashingPower);
+
+        yield return new WaitForSeconds(dashingTime);
+        isdashing = false;
+        yield return new WaitForSeconds(dashingCooldown);
+        canDash = true;
+    }
 
     #endregion
 
