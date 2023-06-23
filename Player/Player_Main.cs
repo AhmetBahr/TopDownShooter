@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class Player_Main : MonoBehaviour
@@ -21,6 +22,13 @@ public class Player_Main : MonoBehaviour
     [SerializeField] private float healingPerSec;
     [SerializeField] private bool usingBool = false;
 
+    [Header("Stamina")]
+    [SerializeField] private float StaminaFloat;
+    [SerializeField] private float staminaAdd;
+
+
+    [SerializeField] private bool staminaUsing;
+
 
     [Header("Dash")]
     [SerializeField] private float dashingPower;
@@ -29,7 +37,10 @@ public class Player_Main : MonoBehaviour
     [SerializeField] private bool canDash;
 
     private bool isdashing;
-     
+
+    [Header("Range Attack")]
+    [SerializeField] private int BulletCount;
+
 
     [Header("MeleeAttack")]
     [SerializeField] private float MeleeDamage;
@@ -41,12 +52,15 @@ public class Player_Main : MonoBehaviour
     [Header("Object")]
     [SerializeField] private Rigidbody2D rb2D;
     [SerializeField] private Healty hl;
+    [SerializeField] private Stamina StLi;
     [SerializeField] private CampFire fr;
 
     [Header("Text")]
     [SerializeField] private TMP_Text CurrentText;
     [SerializeField] private TMP_Text HealingPotText;
     [SerializeField] private TMP_Text HealingPerSecTextt;
+  //  [SerializeField] private TMP_Text BulletCountText;
+
 
 
     [Header("Anim")]
@@ -58,6 +72,7 @@ public class Player_Main : MonoBehaviour
         anim = GetComponent<Animator>();
         currentHealth = maxHealth;
         hl.SetMaxHealth(maxHealth);
+        StLi.SetMaxHealth(StaminaFloat);
         HealingPotText.text = healingPotCount.ToString();
 
     }
@@ -101,9 +116,13 @@ public class Player_Main : MonoBehaviour
 
         }
 
-        if (Input.GetKey(KeyCode.LeftShift)) // For Run 
+        if (Input.GetKey(KeyCode.LeftShift) && StaminaFloat >= 10) // For Run 
         {
             rb2D.velocity = new Vector2(moveHorizontal, moveVertical) * runSpeed;
+
+            StaminaFloat -= 3;
+           StLi.SetMaxHealth(StaminaFloat);
+
 
         }
 
@@ -128,14 +147,20 @@ public class Player_Main : MonoBehaviour
         }
 
 
-        if (Input.GetKey(KeyCode.E) && canDash && moveHorizontal != 0)  // Horizontal Dash
+        if (Input.GetKey(KeyCode.E) && canDash && moveHorizontal != 0 && StaminaFloat >= 20)  // Horizontal Dash
         {
             StartCoroutine(DashHorizontal());
+            StaminaFloat -= 20;
+            StLi.SetMaxHealth(StaminaFloat);
+
         }
 
-        if (Input.GetKey(KeyCode.E) && canDash && moveVertical != 0 ) // Vertical Dash
+        if (Input.GetKey(KeyCode.E) && canDash && moveVertical != 0 && StaminaFloat >= 20) // Vertical Dash
         {   
             StartCoroutine(DashVertical());
+            StaminaFloat -= 20;
+            StLi.SetMaxHealth(StaminaFloat);
+
         }
 
 
