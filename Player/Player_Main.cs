@@ -1,17 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Player_Main : MonoBehaviour
 {
     [Header("Core")]
-    [SerializeField] private float maxHealth = 300;
+    [SerializeField] public float maxHealth = 300;
+    [SerializeField] public float currentHealth;
     [SerializeField] private float moveSpeed;
     [SerializeField] private float runSpeed;
-  
-    private float currentHealth;
-    [SerializeField] private float moveHorizontal;
-    [SerializeField] private float moveVertical;
+
+    private float moveHorizontal;
+    private float moveVertical;
+
+    [Header("Healing Pot")]
+    [SerializeField] private float HealingFloat;
+    [SerializeField] private float usingTimePot;
+    [SerializeField] private float healingPotCount;
+    [SerializeField] private bool usingBool = false;
+
 
     [Header("Dash")]
     [SerializeField] private float dashingPower;
@@ -34,6 +42,11 @@ public class Player_Main : MonoBehaviour
     [SerializeField] private Healty hl;
     [SerializeField] private CampFire fr;
 
+    [Header("Text")]
+    [SerializeField] private TMP_Text CurrentText;
+    [SerializeField] protected TMP_Text HealingPotText;
+
+
     [Header("Anim")]
     private Animator anim;
 
@@ -43,12 +56,15 @@ public class Player_Main : MonoBehaviour
         anim = GetComponent<Animator>();
         currentHealth = maxHealth;
         hl.SetMaxHealth(maxHealth);
+        HealingPotText.text = healingPotCount.ToString();
+
     }
 
     private void Update()
     {
         control();
         playerMovement();
+        HealingController();
     }
 
 
@@ -203,6 +219,8 @@ public class Player_Main : MonoBehaviour
 
         }
 
+        
+
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -221,4 +239,43 @@ public class Player_Main : MonoBehaviour
     }
     #endregion
 
+    #region Heal
+
+    public void Player_healing(float heal)
+    {
+        currentHealth += heal;
+        hl.setHealth(currentHealth);
+    }
+
+    private void HealingController()
+    {
+        CurrentText.text = currentHealth.ToString();
+
+        usingTimePot -= Time.deltaTime;
+
+        if (usingTimePot <= 0)
+            usingBool = true;
+
+        if (Input.GetKeyDown(KeyCode.Q) && usingBool == true && healingPotCount > 0 && currentHealth != maxHealth)
+        {
+
+            //anim
+            //sound
+            Player_healing(HealingFloat);
+
+            healingPotCount--;
+            usingTimePot = 5;
+
+            HealingPotText.text = healingPotCount.ToString();
+
+
+
+
+
+        }
+
+
+    }
+
+    #endregion
 }
