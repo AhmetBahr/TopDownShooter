@@ -8,8 +8,8 @@ public class Player_Main : MonoBehaviour
     [Header("Core")]
     [SerializeField] public float maxHealth = 300;
     [SerializeField] public float currentHealth;
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float runSpeed;
+    [SerializeField] public float moveSpeed;
+    [SerializeField] public float runSpeed;
 
     private float moveHorizontal;
     private float moveVertical;
@@ -18,6 +18,7 @@ public class Player_Main : MonoBehaviour
     [SerializeField] private float HealingFloat;
     [SerializeField] private float usingTimePot;
     [SerializeField] private float healingPotCount;
+    [SerializeField] private float healingPerSec;
     [SerializeField] private bool usingBool = false;
 
 
@@ -44,7 +45,8 @@ public class Player_Main : MonoBehaviour
 
     [Header("Text")]
     [SerializeField] private TMP_Text CurrentText;
-    [SerializeField] protected TMP_Text HealingPotText;
+    [SerializeField] private TMP_Text HealingPotText;
+    [SerializeField] private TMP_Text HealingPerSecTextt;
 
 
     [Header("Anim")]
@@ -217,6 +219,8 @@ public class Player_Main : MonoBehaviour
 
             fr.On();
 
+
+
         }
 
         
@@ -247,9 +251,20 @@ public class Player_Main : MonoBehaviour
         hl.setHealth(currentHealth);
     }
 
+
+    public void PlayerHeailng_PerSec()
+    {
+        currentHealth += healingPerSec;
+        hl.setHealth(currentHealth);
+
+    }
+
+
     private void HealingController()
     {
-        CurrentText.text = currentHealth.ToString();
+        CurrentText.text = System.Math.Round(currentHealth, 1).ToString();
+
+        HealingPerSecTextt.text = "+" +healingPerSec.ToString();
 
         usingTimePot -= Time.deltaTime;
 
@@ -276,6 +291,7 @@ public class Player_Main : MonoBehaviour
 
 
     }
+
 
     #endregion
 }
