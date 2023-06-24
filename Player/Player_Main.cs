@@ -12,6 +12,8 @@ public class Player_Main : MonoBehaviour
     [SerializeField] public float moveSpeed;
     [SerializeField] public float runSpeed;
 
+    private bool isLeft;
+    private bool isRight;
     private float moveHorizontal;
     private float moveVertical;
 
@@ -23,7 +25,8 @@ public class Player_Main : MonoBehaviour
     [SerializeField] private bool usingBool = false;
 
     [Header("Stamina")]
-    [SerializeField] private float StaminaFloat;
+    [SerializeField] private float StaminaMax;
+    [SerializeField] private float StaminaCurrent;
     [SerializeField] private float staminaAdd;
 
 
@@ -69,10 +72,12 @@ public class Player_Main : MonoBehaviour
     
     private void Start()
     {
-        anim = GetComponent<Animator>();
+        anim = GetComponent<Animator>(); 
+        isRight = true;
         currentHealth = maxHealth;
+        StaminaCurrent = StaminaMax;
         hl.SetMaxHealth(maxHealth);
-        StLi.SetMaxHealth(StaminaFloat);
+        StLi.SetMaxHealth(StaminaMax);
         HealingPotText.text = healingPotCount.ToString();
 
     }
@@ -108,62 +113,51 @@ public class Player_Main : MonoBehaviour
         moveVertical = Input.GetAxisRaw("Vertical");
 
 
+        #region walk-run
+
         if (!Input.GetKey(KeyCode.LeftShift)) // Normal walk 
         {
             rb2D.velocity = new Vector2(moveHorizontal, moveVertical) * moveSpeed;
 
-
-
+            Debug.Log(moveHorizontal);
         }
 
-        if (Input.GetKey(KeyCode.LeftShift) && StaminaFloat >= 10) // For Run 
+        if (Input.GetKey(KeyCode.LeftShift) && StaminaCurrent >= 10) // For Run 
         {
             rb2D.velocity = new Vector2(moveHorizontal, moveVertical) * runSpeed;
 
-            StaminaFloat -= 3;
-           StLi.SetMaxHealth(StaminaFloat);
+            if (moveVertical > 0 || moveHorizontal > 0)
+            {
+                StaminaCurrent -= Time.deltaTime * 5;
+                StLi.setHealth(StaminaCurrent);
 
-
+            }
         }
 
+        #endregion
 
-        if (moveHorizontal > -.1f)
-        {
-            transform.localRotation = Quaternion.Euler(0, 0, 0);
+        #region Dash
 
-        }
-        if (moveHorizontal < -.1f)
-        {
-            transform.localRotation = Quaternion.Euler(0, 180, 0);
-
-        }
-        if(moveVertical > -.1f)
-        {
-            //Animaton
-        }
-        if (moveVertical < -.1f)
-        {
-            //Animaton
-        }
-
-
-        if (Input.GetKey(KeyCode.E) && canDash && moveHorizontal != 0 && StaminaFloat >= 20)  // Horizontal Dash
+        if (Input.GetKey(KeyCode.E) && canDash && moveHorizontal != 0 && StaminaCurrent >= 20)  // Horizontal Dash
         {
             StartCoroutine(DashHorizontal());
-            StaminaFloat -= 20;
-            StLi.SetMaxHealth(StaminaFloat);
+
+            StaminaCurrent -= 20;
+            StLi.setHealth(StaminaCurrent);
 
         }
 
-        if (Input.GetKey(KeyCode.E) && canDash && moveVertical != 0 && StaminaFloat >= 20) // Vertical Dash
+        if (Input.GetKey(KeyCode.E) && canDash && moveVertical != 0 && StaminaCurrent >= 20) // Vertical Dash
         {   
             StartCoroutine(DashVertical());
-            StaminaFloat -= 20;
-            StLi.SetMaxHealth(StaminaFloat);
+            StaminaCurrent -= 20;
+            StLi.setHealth(StaminaCurrent);
 
         }
 
+        #endregion
 
+        #region Anim
 
         if (moveHorizontal > .1f || moveHorizontal < -.1f)
         {
@@ -179,14 +173,52 @@ public class Player_Main : MonoBehaviour
         {
             anim.SetBool("MeleeAttack", true);
         }
+        #endregion
+
+        #region flip
+
+        if (moveHorizontal == 1)
+        {
+            isRight = true;
+            isLeft = false;
+        }
+        if (moveHorizontal == -1)
+        {
+            isRight = false;
+            isLeft = true;
+         
+        }
+
+        if(isRight)
+            transform.eulerAngles = new Vector3(0, 0, 0);
+        if(isLeft)
+            transform.eulerAngles = new Vector3(0, 180, 0);
+
+        #endregion
+
 
     }
+
+
+
 
     private IEnumerator DashHorizontal()
     {
         canDash = false;
         isdashing = true;
-        rb2D.velocity = new Vector2(transform.localScale.x * -dashingPower, 0f);
+
+
+        if (moveHorizontal > -.1f)
+        {
+            rb2D.velocity = new Vector2(transform.localScale.x * dashingPower, 0f);
+
+        }
+        if (moveHorizontal < -.1f)
+        {
+            rb2D.velocity = new Vector2(transform.localScale.x * -dashingPower, 0f);
+
+        }
+
 
         yield return new WaitForSeconds(dashingTime);
         isdashing = false;
@@ -197,13 +229,27 @@ public class Player_Main : MonoBehaviour
     {
         canDash = false;
         isdashing = true;
-        rb2D.velocity = new Vector2(0f, transform.localScale.y * dashingPower);
+
+
+        if (moveVertical > -.1f)
+        {
+            rb2D.velocity = new Vector2(0f, transform.localScale.y * dashingPower);
+
+        }
+        if (moveVertical < -.1f)
+        {
+            rb2D.velocity = new Vector2(0f, transform.localScale.y * -dashingPower);
+
+        }
 
         yield return new WaitForSeconds(dashingTime);
         isdashing = false;
         yield return new WaitForSeconds(dashingCooldown);
         canDash = true;
     }
+
+
+  
 
     #endregion
 
