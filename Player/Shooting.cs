@@ -11,7 +11,7 @@ public class Shooting : MonoBehaviour
     [Header("Bullet")]
     [SerializeField] private GameObject Bullet;
     [SerializeField] private Transform BulletTransform;
-    [SerializeField] private bool canFire;
+    [SerializeField] public bool canFire;
     [SerializeField] private float timeBetweenfireing;
 
     private float timer;

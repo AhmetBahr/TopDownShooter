@@ -14,6 +14,9 @@ public class Player_Main : MonoBehaviour
 
     private bool isLeft;
     private bool isRight;
+    private bool isRuning;
+    private bool canMove;
+
     private float moveHorizontal;
     private float moveVertical;
 
@@ -28,6 +31,7 @@ public class Player_Main : MonoBehaviour
     [SerializeField] private float StaminaMax;
     [SerializeField] private float StaminaCurrent;
     [SerializeField] private float staminaAdd;
+    [SerializeField] private float staminaCountDown;
 
 
     [SerializeField] private bool staminaUsing;
@@ -43,6 +47,9 @@ public class Player_Main : MonoBehaviour
 
     [Header("Range Attack")]
     [SerializeField] private int BulletCount;
+
+    [Header("Shield")]
+    [SerializeField] private GameObject fullDefans;
 
 
     [Header("MeleeAttack")]
@@ -62,9 +69,10 @@ public class Player_Main : MonoBehaviour
     [SerializeField] private TMP_Text CurrentText;
     [SerializeField] private TMP_Text HealingPotText;
     [SerializeField] private TMP_Text HealingPerSecTextt;
-  //  [SerializeField] private TMP_Text BulletCountText;
+    //  [SerializeField] private TMP_Text BulletCountText;
 
-
+    [Header("Referans")]
+    [SerializeField] private Shooting shooting;
 
     [Header("Anim")]
     private Animator anim;
@@ -73,7 +81,11 @@ public class Player_Main : MonoBehaviour
     private void Start()
     {
         anim = GetComponent<Animator>(); 
+
         isRight = true;
+        staminaUsing = false;
+        canMove = true;
+
         currentHealth = maxHealth;
         StaminaCurrent = StaminaMax;
         hl.SetMaxHealth(maxHealth);
@@ -87,6 +99,9 @@ public class Player_Main : MonoBehaviour
         control();
         playerMovement();
         HealingController();
+        staminaController();
+        FullDefans();
+
     }
 
 
@@ -115,24 +130,39 @@ public class Player_Main : MonoBehaviour
 
         #region walk-run
 
-        if (!Input.GetKey(KeyCode.LeftShift)) // Normal walk 
+        if (!Input.GetKeyDown(KeyCode.LeftShift) && canMove) // Normal walk 
         {
             rb2D.velocity = new Vector2(moveHorizontal, moveVertical) * moveSpeed;
 
-            Debug.Log(moveHorizontal);
+            //Debug.Log(moveHorizontal);
         }
 
-        if (Input.GetKey(KeyCode.LeftShift) && StaminaCurrent >= 10) // For Run 
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            isRuning = true;
+        }
+
+        if (Input.GetKeyUp(KeyCode.LeftShift))
+        {
+            isRuning = false;
+        }
+
+
+        if (isRuning == true && StaminaCurrent >= 10 && canMove) // For Run 
         {
             rb2D.velocity = new Vector2(moveHorizontal, moveVertical) * runSpeed;
 
-            if (moveVertical > 0 || moveHorizontal > 0)
+            if (moveVertical != 0 || moveHorizontal != 0)
             {
                 StaminaCurrent -= Time.deltaTime * 5;
+                staminaUsing = true;
+                staminaCountDown = 5f;
                 StLi.setHealth(StaminaCurrent);
 
             }
         }
+
+
 
         #endregion
 
@@ -142,6 +172,9 @@ public class Player_Main : MonoBehaviour
         {
             StartCoroutine(DashHorizontal());
 
+
+            staminaUsing = true;
+            staminaCountDown = 5f;
             StaminaCurrent -= 20;
             StLi.setHealth(StaminaCurrent);
 
@@ -150,6 +183,9 @@ public class Player_Main : MonoBehaviour
         if (Input.GetKey(KeyCode.E) && canDash && moveVertical != 0 && StaminaCurrent >= 20) // Vertical Dash
         {   
             StartCoroutine(DashVertical());
+
+            staminaUsing = true;
+            staminaCountDown = 5f;
             StaminaCurrent -= 20;
             StLi.setHealth(StaminaCurrent);
 
@@ -199,7 +235,12 @@ public class Player_Main : MonoBehaviour
 
     }
 
+    private void stopMoving()
+    {
+        rb2D.velocity = new Vector2(moveHorizontal, moveVertical) * 0;
 
+
+    }
 
 
     private IEnumerator DashHorizontal()
@@ -248,8 +289,36 @@ public class Player_Main : MonoBehaviour
         canDash = true;
     }
 
+    private void staminaController()
+    {
+        if(StaminaCurrent >= StaminaMax)
+        {
+            StaminaCurrent = StaminaMax;
+        }
+        
+        if (staminaUsing)
+        {
+            staminaCountDown -= Time.deltaTime;
+            
+            if(staminaCountDown <= 0)
+            {
+                staminaUsing = false;
 
-  
+                
+            }
+
+        }
+
+        if (!staminaUsing)
+        {
+            StaminaCurrent += Time.deltaTime * 5;
+            StLi.setHealth(StaminaCurrent);
+        }
+
+
+    }
+
+
 
     #endregion
 
@@ -277,6 +346,32 @@ public class Player_Main : MonoBehaviour
     }
 
 
+    public void FullDefans()
+    {
+        if (Input.GetKey(KeyCode.V) && StaminaCurrent >= 25 )
+        {
+
+            stopMoving();
+            canMove = false;
+            fullDefans.SetActive(true);
+
+         //   staminaCountDown = 5f;
+          //  staminaUsing = true;
+            StaminaCurrent -= Time.deltaTime * 25;
+            StLi.setHealth(StaminaCurrent);
+
+        }
+
+        if (Input.GetKeyUp(KeyCode.V))
+        {
+            fullDefans.SetActive(false);
+
+            canMove = true;
+
+        }
+
+
+    }
 
 
     #endregion
