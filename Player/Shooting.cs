@@ -11,7 +11,8 @@ public class Shooting : MonoBehaviour
     [Header("Bullet")]
     [SerializeField] private GameObject Bullet;
     [SerializeField] private Transform BulletTransform;
-    [SerializeField] public bool canFire;
+    [SerializeField] private bool canFire;
+    [SerializeField] public bool shieldOn;
     [SerializeField] private float timeBetweenfireing;
 
     private float timer;
@@ -56,7 +57,7 @@ public class Shooting : MonoBehaviour
         }
 
 
-        if(Input.GetMouseButtonDown(1) && canFire)
+        if(Input.GetMouseButtonDown(1) && canFire && !shieldOn)
         {
             canFire = false;
             Instantiate(Bullet, transform.position, Quaternion.identity);

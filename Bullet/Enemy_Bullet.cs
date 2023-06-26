@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class Enemy_Bullet : MonoBehaviour
 {
@@ -10,6 +11,12 @@ public class Enemy_Bullet : MonoBehaviour
     [SerializeField] private float speed = 15f;
 
     [SerializeField] private Rigidbody2D rb;
+
+
+
+    [SerializeField] private GameObject attackPoint;
+    [SerializeField] private float radius;
+    [SerializeField] private LayerMask layers;
 
     Player_Main ply;
 
@@ -35,6 +42,18 @@ public class Enemy_Bullet : MonoBehaviour
         }
 
 
+        if (collision.tag == "MyShield")
+        {
+            Collider2D[] enemy = Physics2D.OverlapCircleAll(attackPoint.transform.position, radius, layers);
+
+            foreach (Collider2D enemyGameobject in enemy)
+            {
+                Destroy(gameObject);
+                Debug.Log("Shield damage");
+            }
+
+        }
+
     }
 
     private void bulletMove()
@@ -47,4 +66,10 @@ public class Enemy_Bullet : MonoBehaviour
         Destroy(gameObject, 3);
     }
 
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(attackPoint.transform.position, radius);
+
+    }
 }

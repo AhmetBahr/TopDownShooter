@@ -50,6 +50,10 @@ public class Player_Main : MonoBehaviour
 
     [Header("Shield")]
     [SerializeField] private GameObject fullDefans;
+    [SerializeField] private GameObject ShiledPoint;
+
+
+
 
 
     [Header("MeleeAttack")]
@@ -232,6 +236,27 @@ public class Player_Main : MonoBehaviour
 
         #endregion
 
+        #region Shield Cont
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            rb2D.velocity = (new Vector2(moveHorizontal, moveVertical) * moveSpeed) / 3 ;
+
+            shooting.shieldOn = true;
+            isRuning = false;
+
+            ShiledPoint.SetActive(true);
+        }
+
+        if (Input.GetKeyUp(KeyCode.C))
+        {
+            shooting.shieldOn = false;
+            isRuning = true;
+
+            ShiledPoint.SetActive(false);
+        }
+
+        #endregion
 
     }
 
@@ -360,6 +385,12 @@ public class Player_Main : MonoBehaviour
             StaminaCurrent -= Time.deltaTime * 25;
             StLi.setHealth(StaminaCurrent);
 
+            if(StaminaCurrent <= 25)
+            {
+                fullDefans.SetActive(false);
+                canMove = true;
+            }
+
         }
 
         if (Input.GetKeyUp(KeyCode.V))
@@ -389,7 +420,10 @@ public class Player_Main : MonoBehaviour
 
         }
 
-        
+
+       
+
+
 
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -406,6 +440,7 @@ public class Player_Main : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(attackPoint.transform.position, radius);
+      
     }
     #endregion
 
